@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const mongoURI = process.env.MONGO_URI;
+const mongoURI = process.env.MONGODB_URI;
 
 const client = new MongoClient(mongoURI);
 let dbInstance = null;
@@ -14,7 +14,7 @@ export async function connectToDB () {
             dbInstance = client.db();
             console.log("Connected to MongoDB");
         };
-            return dbInstance();
+            return dbInstance;
     } catch (err) {
         console.error("MongoDB connection error", err);
         throw err;
