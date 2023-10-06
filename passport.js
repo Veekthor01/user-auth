@@ -16,13 +16,12 @@ passport.use(
     {
       usernameField: 'email',
       passwordField: 'password',
-      passReqToCallback: true, // Allows passing additional data to the callback
     },
-    async (req, email, password, done) => {
+    async (email, password, done) => {
       try {
         const user = await getUserByEmail(email);
         if (user) {
-          return done(null, false, { message: 'Email is already taken.' });
+            return done(null, user);
         }
         const hashedPassword = await generateHash(password);
         const newUser = {
