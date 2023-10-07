@@ -42,7 +42,14 @@ passport.use(
 
 // Local authentication strategy (username/password)
 passport.use(
-  new LocalStrategy(async (email, password, done) => {
+    'local',
+  new LocalStrategy(
+    {
+      usernameField: 'email',
+      passwordField: 'password',
+      passReqToCallback: true, // Pass the req object to the callback below
+    },
+  async (req, email, password, done) => {
     try {
       const user = await getUserByEmail(email);
       if (!user) {
@@ -61,16 +68,16 @@ passport.use(
 
 // Serialization and deserialization functions to store user data in sessions
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user._id);
   });
   
-  passport.deserializeUser(async (id, done) => {
+ passport.deserializeUser(async (id, done) => {
     try {
-      const user = await getUserById(id);
-      done(null, user);
+     const user = await getUserById(id);
+        done(null, user);
     } catch (err) {
-      done(err);
+     done(err);
     }
-  });  
+     });
 
 export default passport;
