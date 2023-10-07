@@ -67,9 +67,14 @@ app.post('/signup', (req, res) => {
         // Handle any errors that occurred during signup
         res.status(500).json({ error: 'Error during signup' });
       } else if (!user) {
-        // Handle the case where the user is not found
-        res.status(400).json({ error: 'Email is already registered.' });// Log errors
-        console.error('signup failed:', err);
+        // Handle the case where login failed
+        if (info && info.message) {
+          // Return the custom error message provided by Passport
+          res.status(400).json({ error: info.message });
+        } else {
+          // Default error message for login failure
+          res.status(400).json({ error: 'Signup failed' });
+        }
       } else {
         // Signup was successful, you can optionally send a 200 OK response
         res.status(200).json({ message: 'Signup successful' });
@@ -79,19 +84,40 @@ app.post('/signup', (req, res) => {
   
   // Login route
   app.post('/login', (req, res) => {
-    passport.authenticate('local', (err, user) => {
+    passport.authenticate('local', (err, user, info) => {
       if (err) {
         // Handle any errors that occurred during login
         res.status(500).json({ error: 'Error during login' });
       } else if (!user) {
         // Handle the case where login failed
-        res.status(400).json({ error: 'Login failed' });
+        if (info && info.message) {
+          // Return the custom error message provided by Passport
+          res.status(400).json({ error: info.message });
+        } else {
+          // Login was not successful
+          res.status(400).json({ error: 'Login failed' });
+        }
       } else {
-        // Login was successful, you can optionally send a 200 OK response
-        res.status(200).json({ message: 'Login successful' });
+        // Login was successful, use req.login() to establish the session
+        req.login(user, (err) => {
+          if (err) {
+            // Handle the error if the session could not be established
+            console.error('Error logging in:', err);
+            res.status(500).json({ error: 'Error logging in' });
+          } else {
+            // Login was successful, you can optionally send a 200 OK response
+            res.status(200).json({ message: 'Login successful' });
+          }
+        });
       }
     })(req, res);
   });  
+
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.status(200).json({ message: 'Logout successful' });
+  });
+  
 
   app.use((err, req, res, next) => {
     console.error(err.stack);
