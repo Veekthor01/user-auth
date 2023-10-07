@@ -3,17 +3,18 @@ import morgan from "morgan";
 import helmet from "helmet";
 import session from "express-session";
 import passport from "passport";
+import validator from 'validator';
 import { default as connectMongoDBSession } from 'connect-mongodb-session';
 import dotenv from 'dotenv';
 dotenv.config();
 import './passport.js';
 import { connectToDB } from './db.js';
-const MongoDBStore = connectMongoDBSession(session);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const secretKey = process.env.SECRET_KEY;
 const mongoURI = process.env.MONGODB_URI;
+const MongoDBStore = connectMongoDBSession(session);
 
 connectToDB();
 
@@ -52,14 +53,25 @@ app.use(passport.session());
 
 // Signup route
 app.post('/signup', (req, res) => {
-    console.log('Signup Request Body:', req.body);
+    const { email, password } = req.body;
+    // Validate the user input
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+    if (!/[a-zA-Z0-9]/.test(password)) {
+        return res.status(400).json({ error: 'Password cannot contain special characters' });
+    }
+    if (!validator.isLength(password, { min: 4 })) {
+        return res.status(400).json({ error: 'Password must be at least 4 characters' });
+    }
+    // Pass the request to the authentication middleware
     passport.authenticate('local-signup', (err, user) => {
       if (err) {
         // Handle any errors that occurred during signup
         res.status(500).json({ error: 'Error during signup' });
       } else if (!user) {
         // Handle the case where signup failed
-        res.status(400).json({ error: 'Signup failed' });// Log errors
+        res.status(400).json({ error: 'Email is already registered.' });// Log errors
         console.error('signup failed:', err);
       } else {
         // Signup was successful, you can optionally send a 200 OK response
