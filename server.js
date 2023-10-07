@@ -58,9 +58,6 @@ app.post('/signup', (req, res) => {
     if (!validator.isEmail(email)) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
-    if (!/[a-zA-Z0-9]/.test(password)) {
-        return res.status(400).json({ error: 'Password cannot contain special characters' });
-    }
     if (!validator.isLength(password, { min: 4 })) {
         return res.status(400).json({ error: 'Password must be at least 4 characters' });
     }
@@ -70,7 +67,7 @@ app.post('/signup', (req, res) => {
         // Handle any errors that occurred during signup
         res.status(500).json({ error: 'Error during signup' });
       } else if (!user) {
-        // Handle the case where signup failed
+        // Handle the case where the user is not found
         res.status(400).json({ error: 'Email is already registered.' });// Log errors
         console.error('signup failed:', err);
       } else {
