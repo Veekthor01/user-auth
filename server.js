@@ -13,6 +13,7 @@ const MongoDBStore = connectMongoDBSession(session);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const secretKey = process.env.SECRET_KEY;
+const mongoURI = process.env.MONGODB_URI;
 
 connectToDB();
 
@@ -39,7 +40,7 @@ const sessionConfig = {
         httpOnly: true,
     },
     store: new MongoDBStore ({
-        uri: process.env.MONGODB_URI,
+        uri: mongoURI,
         collection: 'session',
         expires: 1000 * 60 * 60 * 24 * 7, // 1 week
     }),
@@ -50,18 +51,43 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Signup route
-app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/signup',
-    failureFlash: true, // Enable flash messages for failed signup attempts
-  }));
-
+app.post('/signup', (req, res) => {
+    console.log('Signup Request Body:', req.body);
+    passport.authenticate('local-signup', (err, user) => {
+      if (err) {
+        // Handle any errors that occurred during signup
+        res.status(500).json({ error: 'Error during signup' });
+      } else if (!user) {
+        // Handle the case where signup failed
+        res.status(400).json({ error: 'Signup failed' });// Log errors
+        console.error('signup failed:', err);
+      } else {
+        // Signup was successful, you can optionally send a 200 OK response
+        res.status(200).json({ message: 'Signup successful' });
+      }
+    })(req, res);
+  });
+  
   // Login route
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/login',
-    failureFlash: true, // Enable flash messages for failed login attempts
-  }));
+  app.post('/login', (req, res) => {
+    passport.authenticate('local', (err, user) => {
+      if (err) {
+        // Handle any errors that occurred during login
+        res.status(500).json({ error: 'Error during login' });
+      } else if (!user) {
+        // Handle the case where login failed
+        res.status(400).json({ error: 'Login failed' });
+      } else {
+        // Login was successful, you can optionally send a 200 OK response
+        res.status(200).json({ message: 'Login successful' });
+      }
+    })(req, res);
+  });  
+
+  app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send({ error: err.message });
+  });
 
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
