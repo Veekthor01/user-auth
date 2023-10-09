@@ -1,0 +1,21 @@
+<form action="/login" method="POST">
+<label for ="email">Email: </label>
+<input type ="text" name="email" id="email" aria-label="email field" required/>
+
+<label for ="password">Password: </label>
+<input type ="password" name="password" id="password" aria-label="password field" required/>
+
+<button type="submit">Login</button>
+</form>
+
+<% if (error && error.length > 0) { %>
+    <div class="error-message">
+        <%= error %>
+    </div>
+<% } %>
+
+<% if (success && success.length > 0) { %>
+    <div class="success-message">
+        <%= success %>
+    </div>
+<% } %>
