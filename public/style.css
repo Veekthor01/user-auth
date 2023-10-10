@@ -1,17 +1,17 @@
-.error-message {
+.error {
     background-color: #ff3333; /* Red background */
     color: #fff; /* White text */
-    padding: 10px; /* Padding around the message */
-    margin-bottom: 10px; /* Space below the message */
+    padding: 15px; /* Padding around the message */
+    margin-bottom: 15px; /* Space below the message */
     border: 1px solid #ff0000; /* Red border */
     border-radius: 5px; /* Rounded corners */
 }
 
-.success-message {
+.success {
     background-color: #33cc33; /* Green background */
     color: #fff; /* White text */
-    padding: 10px; /* Padding around the message */
-    margin-bottom: 10px; /* Space below the message */
+    padding: 15px; /* Padding around the message */
+    margin-bottom: 15px; /* Space below the message */
     border: 1px solid #008000; /* Green border */
     border-radius: 5px; /* Rounded corners */
 }
