@@ -7,52 +7,38 @@ import './passport.js';
 const signupRouter = express.Router();
 
 signupRouter.get('/', (req, res) => {
-    // Render the signup page
-    res.render('signup');
-  });
+  return res.render('signup', { messages: req.flash() });
+});
 
 // Signup route
-signupRouter.post('/', (req, res) => {
-    const { email, password } = req.body;
-    // Validate the user input
-    if (!validator.isEmail(email)) {
-        req.flash("messages", { "error" : "Invalid email format" });
-        res.locals.messages = req.flash();
-       return res.redirect('/signup');
-    }
-    if (!validator.isLength(password, { min: 4 })) {
-        req.flash("messages", { "error" : "Password should be at least 4 characters" });
-        res.locals.messages = req.flash();
-       return res.redirect('/signup');
-    }
-    // Pass the request to the authentication middleware
-    passport.authenticate('local-signup', (err, user, info) => {
-      if (err) {
-        // Handle any errors that occurred during signup
-       req.flash("messages", { "error" : "Error during signup" });
-       res.locals.messages = req.flash();
-       return res.redirect('/signup');
-      } else if (!user) {
-        // Handle the case where login failed
-        if (info && info.message) {
-          // Return the custom error message provided by Passport
-           req.flash("messages", { "error" : info.message });
-           res.locals.messages = req.flash();
-            return res.redirect('/signup');
-       } 
-        else {
-          // Default error message for login failure
-            req.flash("messages", { "error" : "Signup failed" });
-            res.locals.messages = req.flash();
-            return res.redirect('/signup');
-        }
+signupRouter.post('/', (req, res, next) => {
+  const { email, password } = req.body;
+  // Validate the user input
+  if (!validator.isEmail(email)) {
+    req.flash('error', 'Invalid email format');
+    return res.render('signup', { messages: req.flash() }); // Redirect to the signup page
+  }
+  if (!validator.isLength(password, { min: 4 })) {
+    req.flash('error', 'Password must be at least 4 characters');
+    return res.render('signup', { messages: req.flash() }); // Redirect to the signup page
+  }
+  // Pass the request to the authentication middleware
+  passport.authenticate('local-signup', (err, user, info) => {
+    if (err) {
+      req.flash('error', 'Error during signup');
+      return res.render('signup', { messages: req.flash() }); // Redirect to the signup page
+    } else if (!user) {
+      if (info && info.message) {
+        req.flash('error', info.message);
       } else {
-        // Signup was successful, you can optionally send a 200 OK response
-        req.flash("messages", { "success" : "Signup successful" });
-       return res.redirect("/dashboard");
+        req.flash('error', 'Signup failed');
       }
-    })(req, res);
-  });
-  
+      return res.render('signup', { messages: req.flash() }); // Redirect to the signup page
+    } else {
+      req.flash('success', 'Signup successful');
+      return res.redirect('/dashboard'); // Redirect to the dashboard page
+    }
+  })(req, res, next);
+});
 
 export default signupRouter;
