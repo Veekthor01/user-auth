@@ -23,7 +23,8 @@ passport.use(
         // Check if the email is already taken
         const user = await getUserByEmail(email);
         if (user) {
-          return done(null, false, { message: 'Email is already taken.' });
+          req.flash('error', 'Email is already taken.');
+          return done(null, false);
         }
         const hashedPassword = await generateHash(password);
         const newUser = {
@@ -34,6 +35,7 @@ passport.use(
         const savedUser = await saveUser(newUser);
         return done(null, savedUser);
       } catch (err) {
+        req.flash('error', 'An error occurred during signup.');
         return done(err);
       }
     }
