@@ -12,7 +12,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 import './passport.js';
 import { connectToDB } from './db.js';
-import signupRouter from './signUpRoute.js'; // Adjust the path as needed
+import signupRouter from './routes/signUpRoute.js';
+import loginRouter from './routes/loginRoute.js';
+import dashboardRouter from './routes/dashboardRoute.js';
+import logoutRouter from './routes/logoutRoute.js';
 // This is needed to get the current directory name in ES modules
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -40,7 +43,7 @@ app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'", "trusted-cdn.com"],
         styleSrc: ["'self'", "trusted-cdn.com", "http://localhost:3000"],
-        scriptSrc: ["'self'", "trusted-cdn.com"],
+        scriptSrc: ["'self'", "trusted-cdn.com", "'unsafe-inline'"],
     },
 }));
 
@@ -67,66 +70,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use('/signup', signupRouter);
-
-// Define routes
 app.get('/', (req, res) => {
     res.render('index');
  });
+app.use('/signup', signupRouter);
+app.use('/login', loginRouter);
+app.use('/dashboard', dashboardRouter);
+app.use('/logout', logoutRouter);
   
-  app.get('/login', (req, res) => {
-    // Render the login page
-    res.render('login');
-  });
-
- app.get('/dashboard', (req, res) => {
-    req.flash('success', 'Signup successful');
-    return res.render('dashboard', { messages: req.flash() });
- }); 
-  
-  // Login route
-  app.post('/login', (req, res) => {
-    passport.authenticate('local', (err, user, info) => {
-      if (err) {
-        // Handle any errors that occurred during login
-        req.flash("error", "Error during login");
-        return res.redirect("/login");
-      } else if (!user) {
-        // Handle the case where login failed
-        if (info && info.message) {
-          // Return the custom error message provided by Passport
-            req.flash("error", info.message);
-            return res.redirect("/login");
-        } else {
-          // Login was not successful
-            req.flash("error", "Login failed");
-            return res.redirect("/login");
-        }
-      } else {
-        // Login was successful, use req.login() to establish the session
-        req.login(user, (err) => {
-          if (err) {
-            // Handle the error if the session could not be established
-            console.error('Error logging in:', err);
-            req.flash("error", "Error logging in");
-            return res.redirect("/login");
-          } else {
-            // Login was successful, you can optionally send a 200 OK response
-            req.flash("success", "Login successful");
-            return res.redirect("/dashboard");
-          }
-        });
-      }
-    })(req, res);
-  });  
-
-  app.get('/logout', (req, res) => {
-    req.logout();
-    req.flash("success", "Logout successful");
-    res.redirect('/login');
-  });
-  
-
   app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send({ error: err.message });
