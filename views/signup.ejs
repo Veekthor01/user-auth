@@ -8,19 +8,25 @@
 </head>
 <body>
     <h1>Signup Page</h1>
-
-    <% if (messages.error && messages.error.length > 0) { %>
-        <div class="error-message">
-            <%= messages %>
+    
+<!-- Display error messages -->
+<% if (messages.error) { %>
+      <% messages.error.forEach(function (error) { %>
+        <div class="error">
+        <p><%= error %></p>
         </div>
-    <% } %>
-
-    <% if (messages.success && messages.success.length > 0) { %>
-        <div class="success-message">
-            <%= messages %>
+      <% }); %>
+  <% } %>
+  
+  <!-- Display success message -->
+  <% if (messages.success) { %>
+      <% messages.success.forEach(function (success) { %>
+        <div class="success">
+        <p><%= success %></p>
         </div>
-    <% } %>
-
+      <% }); %>
+  <% } %>
+  
     <form action="/signup" method="POST">
         <label for="email">Email:</label>
         <input type="text" name="email" id="email" aria-label="email field" required/>
