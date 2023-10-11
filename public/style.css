@@ -1,17 +1,85 @@
 .error {
-    background-color: #ff3333; /* Red background */
-    color: #fff; /* White text */
-    padding: 15px; /* Padding around the message */
-    margin-bottom: 15px; /* Space below the message */
-    border: 1px solid #ff0000; /* Red border */
-    border-radius: 5px; /* Rounded corners */
+    background-color: #ff3333;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ff0000;
+    border-radius: 5px;
 }
 
 .success {
-    background-color: #33cc33; /* Green background */
-    color: #fff; /* White text */
-    padding: 15px; /* Padding around the message */
-    margin-bottom: 15px; /* Space below the message */
-    border: 1px solid #008000; /* Green border */
-    border-radius: 5px; /* Rounded corners */
+    background-color: #33cc33;
+    color: #fff; 
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #008000;
+    border-radius: 5px;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+form {
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3; /* Hover background color */
+}
+
+a {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    margin: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: #0056b3;
+}
+
+a:nth-child(1) {
+    margin-right: 10px;
 }
