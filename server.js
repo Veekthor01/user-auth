@@ -78,7 +78,7 @@ app.use('/login', loginRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/logout', logoutRouter);
 
-// Github authentication
+// Github authentication route
 app.get('/auth/github', 
 passport.authenticate('github'));
 
