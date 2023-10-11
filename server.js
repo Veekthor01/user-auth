@@ -12,6 +12,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import './passport.js';
 import { connectToDB } from './db.js';
+import homeRouter from './routes/homeRoute.js';
 import signupRouter from './routes/signUpRoute.js';
 import loginRouter from './routes/loginRoute.js';
 import dashboardRouter from './routes/dashboardRoute.js';
@@ -70,9 +71,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.get('/', (req, res) => {
-    res.render('index');
- });
+app.use('/', homeRouter);
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
 app.use('/dashboard', dashboardRouter);
