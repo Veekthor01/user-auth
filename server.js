@@ -11,6 +11,7 @@ import { default as connectMongoDBSession } from 'connect-mongodb-session';
 import dotenv from 'dotenv';
 dotenv.config();
 import './passport.js';
+import './passportOauth.js';
 import { connectToDB } from './db.js';
 import homeRouter from './routes/homeRoute.js';
 import signupRouter from './routes/signUpRoute.js';
@@ -76,12 +77,26 @@ app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/logout', logoutRouter);
+
+// Github authentication
+app.get('/auth/github', 
+passport.authenticate('github'));
+
+// Github authentication callback
+app.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/dashboard');
+  }
+);
   
+// Error handling middleware
   app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send({ error: err.message });
   });
 
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
 });
