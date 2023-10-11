@@ -27,10 +27,10 @@ h1 {
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 18px;
     color: #333;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 20px;
   }
 
 form {
@@ -74,10 +74,15 @@ button:hover {
     background-color: #0056b3;
 }
 
+.oauth-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
 .oauth-button {
     display: flex;
-    justify-content: center;
-    width: 150px;
+  align-items: center;
+  justify-content: center;
     font-size: 14px;
     padding: 10px;
     color: white;
@@ -86,11 +91,23 @@ button:hover {
     margin: 0 auto;
     cursor: pointer;
   }
+
+  .oauth-button:first-child {
+    margin-right: 10px;
+  }
+  
+  .oauth-button:last-child {
+    margin-left: 10px;
+  }
   
   .oauth-button:hover {
     background-color: #363f45;
   }
 
+  .oauth-button i {
+    font-size: 24px;
+    margin-right: 10px;
+  }
 a {
     display: inline-block;
     padding: 10px 20px;
