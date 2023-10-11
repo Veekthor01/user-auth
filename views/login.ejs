@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Login</title>
 </head>
 <body>
@@ -54,8 +55,14 @@
         <button type="submit">Login</button>
     </form>
 
-    <h2>You can also log in with</h2>
-    <a role="button" class="oauth-button" href="/auth/github">Login with GitHub</a>
-
+    <h2>You can also login with</h2>
+    <div class="oauth-container">
+      <a role="button" class="oauth-button" href="/auth/github">
+        <i class="fa fa-github"></i>GitHub</a>
+      <a role="button" class="oauth-button" href="/auth/google">
+        <i class="fa fa-google"></i>Google</a>
+  </div>
+  
+    
 </body>
 </html>
