@@ -44,7 +44,8 @@ app.use(helmet.frameguard({ action: "sameorigin" }));
 app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'", "trusted-cdn.com"],
-        styleSrc: ["'self'", "trusted-cdn.com", "http://localhost:3000"],
+        styleSrc: ["'self'", "trusted-cdn.com", "http://localhost:3000", 
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"],
         scriptSrc: ["'self'", "trusted-cdn.com", "'unsafe-inline'"],
     },
 }));
@@ -88,6 +89,18 @@ app.get('/auth/github/callback',
   function(req, res) {
     res.redirect('/dashboard');
   }
+);
+
+// Google authentication route
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile'] }));
+
+// Google authentication callback
+app.get('/auth/google/callback', 
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function(req, res) {
+        res.redirect('/dashboard');
+    }
 );
   
 // Error handling middleware
