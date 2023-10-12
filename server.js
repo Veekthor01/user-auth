@@ -18,6 +18,8 @@ import signupRouter from './routes/signUpRoute.js';
 import loginRouter from './routes/loginRoute.js';
 import dashboardRouter from './routes/dashboardRoute.js';
 import logoutRouter from './routes/logoutRoute.js';
+import forgotPasswordRouter from './routes/forgotPasswordRoute.js';
+import resetPasswordRouter from './routes/resetPasswordRoute.js';
 // This is needed to get the current directory name in ES modules
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -78,6 +80,8 @@ app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/logout', logoutRouter);
+app.use('/forgot-password', forgotPasswordRouter);
+app.use('/reset-password', resetPasswordRouter);
 
 // Github authentication route
 app.get('/auth/github', 
