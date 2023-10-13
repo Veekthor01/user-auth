@@ -3,13 +3,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const email = process.env.EMAIL_HOST_USER;
-const password = process.env.EMAIL_HOST_PASSWORD;
+const appPassword = process.env.EMAIL_HOST_APP_PASSWORD;
 
 const emailConfig = {
   service: 'Gmail', // Example: 'Gmail' for Gmail
   auth: {
     user: email, // Your email address
-    pass: password, // Your password
+    pass: appPassword, // Your password
   },
   tls: {
     rejectUnauthorized: false,
