@@ -13,6 +13,7 @@ dotenv.config();
 import './passport.js';
 import './passportOauth.js';
 import { connectToDB } from './db.js';
+import { closeDBConnection } from './db.js';
 import homeRouter from './routes/homeRoute.js';
 import signupRouter from './routes/signUpRoute.js';
 import loginRouter from './routes/loginRoute.js';
@@ -116,4 +117,15 @@ app.get('/auth/google/callback',
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
+});
+
+// Close the database connection when the Node process ends
+process.on('SIGTERM', () => {
+    console.info('SIGTERM signal received.');
+    console.log('Closing HTTP server.');
+    server.close(() => {
+        console.log('HTTP server closed.');
+        closeDBConnection();
+        process.exit(0);
+    });
 });
