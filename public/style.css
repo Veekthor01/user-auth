@@ -108,8 +108,17 @@ button:hover {
     font-size: 24px;
     margin-right: 10px;
   }
+
+  .link-container {
+    max-width: 250px; 
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
 a {
-    display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
     padding: 10px 20px;
     text-decoration: none;
     color: #fff;
