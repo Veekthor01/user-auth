@@ -1,13 +1,12 @@
-import { MongoClient } from 'mongodb';
-import dotenv from 'dotenv';
-dotenv.config();
+const { MongoClient } = require("mongodb");
+require("dotenv").config();
 
 const mongoURI = process.env.MONGODB_URI;
 
 const client = new MongoClient(mongoURI);
 let dbInstance = null;
 
-export async function connectToDB () {
+async function connectToDB () {
     try {
         if (!dbInstance) {
             await client.connect();
@@ -16,18 +15,20 @@ export async function connectToDB () {
         };
             return dbInstance;
     } catch (err) {
-        console.error("MongoDB connection error", err);
+       console.error("MongoDB connection error", err);
         throw err;
     };
 };
 
-export async function closeDBConnection() {
+async function closeDBConnection() {
     try {
         await client.close();
-        console.log("Closed MongoDB connection");
+       console.log("Closed MongoDB connection");
     }
     catch (err) {
-        console.error("MongoDB close connection error", err);
+      console.error("MongoDB close connection error", err);
         throw err;
     }
 }
+
+module.exports = { connectToDB, closeDBConnection };
