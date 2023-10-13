@@ -1,6 +1,5 @@
-import { createTransport } from 'nodemailer';
-import dotenv from 'dotenv';
-dotenv.config();
+const { createTransport } = require('nodemailer');
+require('dotenv').config();
 
 const email = process.env.EMAIL_HOST_USER;
 const appPassword = process.env.EMAIL_HOST_APP_PASSWORD;
@@ -18,4 +17,4 @@ const emailConfig = {
 
 const transporter = createTransport(emailConfig);
 
-export default transporter;
+module.exports = transporter;
