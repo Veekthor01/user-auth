@@ -1,5 +1,6 @@
 import express from 'express';
 import { Router } from 'express';
+import bcrypt from 'bcrypt';
 import { connectToDB } from '../db.js';
 
 const resetPasswordRouter = express.Router();
@@ -7,6 +8,8 @@ const resetPasswordRouter = express.Router();
 resetPasswordRouter.get('/', async (req, res) => {
   const token = req.query.token;
   try {
+    const db = await connectToDB();
+    const passwordResetTokensCollection = db.collection('passwordResetTokens');
     const tokenData = await passwordResetTokensCollection.findOne({ token });
     if (!tokenData || new Date() > tokenData.expirationTime) {
       res.send('Invalid or expired token.');
@@ -41,8 +44,10 @@ resetPasswordRouter.post('/', async (req, res) => {
       res.send('User not found.');
       return;
     }
+    // Hash the new password with bcrypt
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
     // Update the user's password in your database
-    await usersCollection.updateOne({ _id: user._id }, { $set: { password: newPassword } });
+    await usersCollection.updateOne({ _id: user._id }, { $set: { password: hashedPassword } });
     // Remove the used token from your database
     await passwordResetTokensCollection.deleteOne({ token: token });
     res.send('Password reset successful.');
