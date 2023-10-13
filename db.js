@@ -20,3 +20,14 @@ export async function connectToDB () {
         throw err;
     };
 };
+
+export async function closeDBConnection() {
+    try {
+        await client.close();
+        console.log("Closed MongoDB connection");
+    }
+    catch (err) {
+        console.error("MongoDB close connection error", err);
+        throw err;
+    }
+}
