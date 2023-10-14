@@ -1,11 +1,15 @@
-import express from 'express';
-import { Router } from "express";
-
+const express = require('express');
 const homeRouter = express.Router();
 
 homeRouter.get('/', (req, res) => {
-    req.flash("success", "Logout successful");
-    return res.render('index', { messages: req.flash() });
- });
+    try {
+        req.flash("success", "Logout successful");
+        res.render('index', { messages: req.flash() });
+    } catch (error) {
+        // Handle the error, for example, by sending an error response or logging it.
+        console.error('An error occurred:', error);
+        return res.status(500).send('An error occurred while rendering the home page.');
+    }
+});
 
-export default homeRouter;
+module.exports = homeRouter;
