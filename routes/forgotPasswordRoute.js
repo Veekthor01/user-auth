@@ -1,10 +1,8 @@
-import express from 'express';
-import { Router } from "express";
-import crypto from 'crypto';
-import dotenv from 'dotenv';
-dotenv.config();
-import transporter from '../email.js';
-import { connectToDB } from '../db.js';
+const express = require('express');
+const crypto = require('crypto');
+require("dotenv").config();
+const transporter = require('../email');
+const { connectToDB } = require('../db');
 
 const forgotPasswordRouter = express.Router();
 const myEmail = process.env.EMAIL_HOST_USER;
@@ -13,9 +11,15 @@ function generateToken() {
     return crypto.randomBytes(20).toString('hex');
   }
 
-forgotPasswordRouter.get('/', (req, res) => {
-    res.render('forgotPassword');
-  });
+  forgotPasswordRouter.get('/', (req, res) => {
+    try {
+        res.render('forgotPassword');
+    } catch (error) {
+        // Handle the error, for example, by sending an error response or logging it.
+        console.error('An error occurred:', error);
+        return res.status(500).send('An error occurred while rendering the forgotPassword page.');
+    }
+});
 
 forgotPasswordRouter.post('/', async (req, res) => {
     const { email } = req.body;
@@ -50,17 +54,17 @@ forgotPasswordRouter.post('/', async (req, res) => {
       // Send the email
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.error('Email could not be sent:', error);
+          //console.error('Email could not be sent:', error);
           res.send('Email could not be sent.');
         } else {
-          console.log('Email sent:', info.response);
+          //console.log('Email sent:', info.response);
           res.send('Check your email for a password reset link.');
         }
       });
     } catch (error) {
-      console.error('Error:', error);
+      //console.error('Error:', error);
       res.send('An error occurred while processing your request.');
     }
   });
   
-  export default forgotPasswordRouter;
+module.exports = forgotPasswordRouter;
