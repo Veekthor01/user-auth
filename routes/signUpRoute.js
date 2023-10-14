@@ -1,13 +1,18 @@
-import express from 'express';
-import { Router } from "express";
-import validator from 'validator';
-import passport from 'passport';
-import '../passport.js';
+const express = require('express');
+const passport = require('passport');
+const validator = require('validator');
+require('../passport-config/passport');
 
 const signupRouter = express.Router();
 
 signupRouter.get('/', (req, res) => {
-  return res.render('signup', { messages: req.flash() });
+    try {
+        return res.render('signup', { messages: req.flash() });
+    } catch (error) {
+        // Handle the error, for example, by sending an error response or logging it.
+        console.error('An error occurred:', error);
+        return res.status(500).send('An error occurred while rendering the signup page.');
+    }
 });
 
 // Signup route
@@ -41,4 +46,4 @@ signupRouter.post('/', (req, res, next) => {
   })(req, res, next);
 });
 
-export default signupRouter;
+module.exports = signupRouter;
