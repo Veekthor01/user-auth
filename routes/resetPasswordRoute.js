@@ -1,7 +1,6 @@
-import express from 'express';
-import { Router } from 'express';
-import bcrypt from 'bcrypt';
-import { connectToDB } from '../db.js';
+const express = require('express');
+const bcrypt = require('bcrypt');
+const { connectToDB } = require('../db');
 
 const resetPasswordRouter = express.Router();
 
@@ -17,7 +16,7 @@ resetPasswordRouter.get('/', async (req, res) => {
       res.render('resetPassword', { token });
     }
   } catch (error) {
-    console.error('Error:', error);
+    //console.error('Error:', error);
     res.send('An error occurred while processing your request.');
   }
 });
@@ -52,9 +51,9 @@ resetPasswordRouter.post('/', async (req, res) => {
     await passwordResetTokensCollection.deleteOne({ token: token });
     res.send('Password reset successful.');
   } catch (error) {
-    console.error('Error:', error);
+    //console.error('Error:', error);
     res.send('An error occurred while processing your request.');
   }
 });
 
-export default resetPasswordRouter;
+module.exports = resetPasswordRouter;
