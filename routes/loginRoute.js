@@ -1,14 +1,19 @@
-import express from 'express';
-import { Router } from "express";
-import passport from 'passport';
-import '../passport.js';
+const express = require('express');
+const passport = require('passport');
+require('../passport-config/passport');
 
 const loginRouter = express.Router();
 
 loginRouter.get('/', (req, res) => {
-    // Render the login page
-    return res.render('login', { messages: req.flash() });
-  });
+    try {
+        // Render the login page
+        res.render('login', { messages: req.flash() });
+    } catch (error) {
+        // Handle the error, for example, by sending an error response or logging it.
+        console.error('An error occurred:', error);
+        return res.status(500).send('An error occurred while rendering the login page.');
+    }
+});
 
 loginRouter.post('/', (req, res) => {
     passport.authenticate('local', (err, user, info) => {
@@ -32,7 +37,7 @@ loginRouter.post('/', (req, res) => {
         req.login(user, (err) => {
           if (err) {
             // Handle the error if the session could not be established
-            console.error('Error logging in:', err);
+            //console.error('Error logging in:', err);
             req.flash("error", "Error logging in");
             return res.render('login', { messages: req.flash() });
           } else {
@@ -45,4 +50,4 @@ loginRouter.post('/', (req, res) => {
     })(req, res);
   });  
 
-  export default loginRouter;
+module.exports = loginRouter;
