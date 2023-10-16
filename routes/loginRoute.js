@@ -6,10 +6,8 @@ const loginRouter = express.Router();
 
 loginRouter.get('/', (req, res) => {
     try {
-        // Render the login page
         res.render('login', { messages: req.flash() });
     } catch (error) {
-        // Handle the error, for example, by sending an error response or logging it.
         console.error('An error occurred:', error);
         return res.status(500).send('An error occurred while rendering the login page.');
     }
@@ -37,11 +35,11 @@ loginRouter.post('/', (req, res) => {
         req.login(user, (err) => {
           if (err) {
             // Handle the error if the session could not be established
-            //console.error('Error logging in:', err);
+            console.error('Error logging in:', err);
             req.flash("error", "Error logging in");
             return res.render('login', { messages: req.flash() });
           } else {
-            // Login was successful, you can optionally send a 200 OK response
+            // Login was successful
             req.flash("success", "Login successful");
             return res.redirect('/dashboard');
           }
