@@ -3,14 +3,13 @@ const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 const { getUserById, getUserByEmail, saveUser } = require('../user');
 
-
 // Function to generate a password hash
 async function generateHash(password) {
-  const saltRounds = 10; // You can adjust the number of salt rounds for security
+  const saltRounds = 10;
   return await bcrypt.hash(password, saltRounds);
-}
+};
 
-// Local authentication strategy for signup (username/password)
+// Local authentication strategy for signup (email/password)
 passport.use(
   'local-signup',
   new LocalStrategy(
@@ -43,14 +42,14 @@ passport.use(
   )
 );
 
-// Local authentication strategy (username/password)
+// Local authentication strategy (email/password)
 passport.use(
     'local',
   new LocalStrategy(
     {
       usernameField: 'email',
       passwordField: 'password',
-      passReqToCallback: true, // Pass the req object to the callback below
+      passReqToCallback: true,
     },
   async (req, email, password, done) => {
     try {
@@ -69,11 +68,12 @@ passport.use(
   })
 );
 
-// Serialization and deserialization functions to store user data in sessions
+// Serialization function to store user data in sessions
 passport.serializeUser((user, done) => {
     done(null, user._id);
   });
   
+// Deserialization function to retrieve user data from sessions
  passport.deserializeUser(async (id, done) => {
     try {
      const user = await getUserById(id);

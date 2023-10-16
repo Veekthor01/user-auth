@@ -3,13 +3,12 @@ const GithubStrategy = require('passport-github2').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 require('dotenv').config();
 
-
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
-
+// Github Strategy for Passport Authentication
 passport.use(
     new GithubStrategy(
         {
@@ -23,6 +22,7 @@ passport.use(
   )
 );
 
+// Google Strategy for Passport Authentication
 passport.use(
     new GoogleStrategy(
         {
@@ -39,7 +39,8 @@ passport.use(
 passport.serializeUser(function(user, done) {
     done(null, user);
    });
-   passport.deserializeUser(function(user, done) {
+
+passport.deserializeUser(function(user, done) {
     done(null, user);
    });
 
