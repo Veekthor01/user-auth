@@ -5,10 +5,10 @@ const email = process.env.EMAIL_HOST_USER;
 const appPassword = process.env.EMAIL_HOST_APP_PASSWORD;
 
 const emailConfig = {
-  service: 'Gmail', // Example: 'Gmail' for Gmail
+  service: 'Gmail',
   auth: {
-    user: email, // Your email address
-    pass: appPassword, // Your password
+    user: email,
+    pass: appPassword,
   },
   tls: {
     rejectUnauthorized: false,
