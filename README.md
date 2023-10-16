@@ -10,4 +10,4 @@
 * MongoDB
 * Passport Middleware
 * Oauth
-* EJS
+* EJS Templates
