@@ -6,6 +6,7 @@ const mongoURI = process.env.MONGODB_URI;
 const client = new MongoClient(mongoURI);
 let dbInstance = null;
 
+// function to create a connection to the database
 async function connectToDB () {
     try {
         if (!dbInstance) {
@@ -20,6 +21,7 @@ async function connectToDB () {
     };
 };
 
+// function to close the database connection
 async function closeDBConnection() {
     try {
         await client.close();
