@@ -16,7 +16,7 @@ resetPasswordRouter.get('/', async (req, res) => {
       res.render('resetPassword', { token });
     }
   } catch (error) {
-    //console.error('Error:', error);
+    console.error('Error:', error);
     res.send('An error occurred while processing your request.');
   }
 });
@@ -25,9 +25,7 @@ resetPasswordRouter.post('/', async (req, res) => {
   const token = req.body.token;
   const newPassword = req.body.newPassword;
   try {
-    // Connect to your MongoDB database
     const db = await connectToDB();
-    // Assuming you have a 'passwordResetTokens' collection in your database
     const passwordResetTokensCollection = db.collection('passwordResetTokens');
     // Find the token in your database
     const tokenData = await passwordResetTokensCollection.findOne({ token });
@@ -35,7 +33,7 @@ resetPasswordRouter.post('/', async (req, res) => {
       res.send('Invalid or expired token.');
       return;
     }
-    // Assuming you have a 'users' collection in your database
+    // Find the user associated with the token
     const usersCollection = db.collection('user');
     // Find the user with the associated user ID
     const user = await usersCollection.findOne({ _id: tokenData.userId });
@@ -51,7 +49,7 @@ resetPasswordRouter.post('/', async (req, res) => {
     await passwordResetTokensCollection.deleteOne({ token: token });
     res.send('Password reset successful.');
   } catch (error) {
-    //console.error('Error:', error);
+    console.error('Error:', error);
     res.send('An error occurred while processing your request.');
   }
 });
